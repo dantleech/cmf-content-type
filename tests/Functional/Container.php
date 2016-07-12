@@ -21,6 +21,7 @@ use Symfony\Cmf\Component\ContentType\Metadata\Driver\ArrayDriver;
 use Symfony\Cmf\Component\ContentType\View\ScalarView;
 use Symfony\Cmf\Component\ContentType\ViewRegistry;
 use Symfony\Component\Form\Forms;
+use Symfony\Cmf\Component\ContentType\Tests\Functional\Example\Field\ImageField;
 
 class Container extends PimpleContainer
 {
@@ -54,6 +55,7 @@ class Container extends PimpleContainer
         $this['cmf_content_type.registry.field'] = function ($container) {
             $registry = new FieldRegistry();
             $registry->register('text', new TextField());
+            $registry->register('image', new ImageField());
 
             return $registry;
         };
