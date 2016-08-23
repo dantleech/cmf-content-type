@@ -50,14 +50,12 @@ class ArrayDriver implements AdvancedDriverInterface
             $fieldConfig = array_merge([
                 'type' => null,
                 'options' => [],
-                'form_options' => [],
             ], $fieldConfig);
             $propertyMetadata = new PropertyMetadata(
                 $class->getName(),
                 $fieldName,
                 $fieldConfig['type'],
-                $fieldConfig['options'],
-                $fieldConfig['form_options']
+                $fieldConfig['options']
             );
 
             $classMetadata->addPropertyMetadata($propertyMetadata);

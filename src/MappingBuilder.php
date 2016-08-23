@@ -11,6 +11,8 @@
 
 namespace Symfony\Cmf\Component\ContentType;
 
+use Symfony\Cmf\Component\ContentType\Mapping\CollectionMapping;
+
 /**
  * Builder for mappings.
  *
@@ -38,5 +40,10 @@ class MappingBuilder
     public function compound($classFqn)
     {
         return new MappingBuilderCompound($this->registry, $classFqn);
+    }
+
+    public function collection()
+    {
+        return new CollectionMapping();
     }
 }

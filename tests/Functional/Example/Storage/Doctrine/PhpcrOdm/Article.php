@@ -25,7 +25,6 @@ class Article
 
     // mapped via. the content-type metadata
     public $title;
-
-    // mapped via. the content-type metadata
     public $image;
+    public $slideshow;
 }

@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Component\ContentType\Tests\Functional\Example\Form\Type;
 
 use Symfony\Cmf\Component\ContentType\Tests\Functional\Example\Model\Image;

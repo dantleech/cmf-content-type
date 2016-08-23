@@ -13,7 +13,7 @@ namespace Symfony\Cmf\Component\ContentType;
 
 use Metadata\MetadataFactory;
 use Metadata\NullMetadata;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Cmf\Component\ContentType\OptionsResolver\FieldOptionsResolver;
 
 class ContentViewBuilder
 {
@@ -50,9 +50,9 @@ class ContentViewBuilder
             $field = $this->fieldRegistry->get($propertyMetadata->getType());
             $view = $this->viewRegistry->get($field->getViewType());
 
-            $resolver = new OptionsResolver();
+            $resolver = new FieldOptionsResolver();
             $field->configureOptions($resolver);
-            $options = $resolver->resolve($propertyMetadata->getOptions());
+            $options = $resolver->resolveViewOptions($propertyMetadata->getOptions());
             $value = $propertyMetadata->getValue($content);
             $view->buildView($this, $subView, $value, $options);
 

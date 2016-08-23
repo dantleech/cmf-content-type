@@ -10,9 +10,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony/form": "^2.8|^3.0",
+        "symfony/form": "^3.0@stable",
         "jms/metadata": "^1.5",
-        "symfony/options-resolver": "^2.8|^3.1",
+        "symfony/options-resolver": "^3.0",
         "sylius/registry": "^0.19.0"
     },
     "require-dev": {

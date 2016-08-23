@@ -17,20 +17,17 @@ class PropertyMetadata extends BasePropertyMetadata
 {
     private $type;
     private $options = [];
-    private $formOptions = [];
 
     public function __construct(
         $class,
         $name,
         $type,
-        array $options,
-        array $formOptions
+        array $options
     ) {
         parent::__construct($class, $name);
 
         $this->type = $type;
         $this->options = $options;
-        $this->formOptions = $formOptions;
     }
 
     public function getName()
@@ -46,10 +43,5 @@ class PropertyMetadata extends BasePropertyMetadata
     public function getOptions()
     {
         return $this->options;
-    }
-
-    public function getFormOptions()
-    {
-        return $this->formOptions;
     }
 }

@@ -1,23 +1,24 @@
 CMF Content Type Component
 ==========================
 
-.. note::
-
-    This component does not exist, this is just an idea.
-
 What is it?
 -----------
 
-The ContentType component provides a way of mapping content to entities /
-documents and providing the infrastructure to display the content in the
-frontend and manage the content in the backend.
+The ContentType component allows you to map content fields to an object.
+Content fields can be simple scalar values, such as text, or compound objects
+such as images or geolocations.
+
+It provides:
+
+- **Forms**: How the content type is modified.
+- **Storage**: How the content type is stored.
+- **View**: How the content type is rendered.
+- **Asset Dependencies**: How the content type declares its asset
+  requirements.
 
 For example, a geolocation field will require at least 3 properties to be
 mapped (long, lat, zoom), and we can imagine that it requires some javascript
 to show the map in the frontend and also in the backend.
-
-This package handles all of these concerns, namely: (Symfony) Form generation,
-Asset depenecies, rendering the frontend content and storage.
 
 In brief this will allow you to define something like:
 
@@ -88,7 +89,6 @@ Now we can define a content type for it:
                         type: Symfony\Cmf\Component\ContentType\Field\ResourceList
                         options:
                             glob: "/cms/content/news/**/*"
-                        view_options:
                             page_size: 10
                 driver: doctrine/phpcr
 
@@ -117,12 +117,13 @@ Now you want to add a form to your backoffice, this as simple asking the
 
     <?php
 
+
     // create the content object (this is just a plain PHP object)
     // TODO: What about value objects?
     $content = new NewsPage();
 
-    // get the form
-    $form = $contentFormBuilder->buildFormForContent($content);
+    $formFactory = // get the symfony form factory
+    $form = $formFactory->create(NewsPage::class);
 
     // submit the data (bypassing validation etc..)
     $form->submit($data);
@@ -132,7 +133,8 @@ Now you want to add a form to your backoffice, this as simple asking the
     $entityManager->persist($newsList);
     $entityManager->flush();
 
-And it is as simple as that.
+And it is as simple as that. Note that we pass the content type class to the
+form factory and **NOT** a form type class.
 
 Frontend (website) Rendering
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

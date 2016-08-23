@@ -30,12 +30,13 @@ class ContentTypeDriver implements MappingDriver
     public function __construct(
         FieldRegistry $registry,
         MappingRegistry $mappingRegistry,
-        MappingResolver $resolver
+        MappingResolver $resolver,
+        FieldMapper $mapper
     ) {
         $this->registry = $registry;
         $this->mappingRegistry = $mappingRegistry;
-        $this->mapper = new FieldMapper();
         $this->mappingResolver = $resolver;
+        $this->mapper = $mapper;
     }
 
     private function init()
@@ -89,6 +90,7 @@ class ContentTypeDriver implements MappingDriver
         $metadata->mapId([
             'fieldName' => 'id',
             'id' => true,
+            'strategy' => 'assigned',
         ]);
 
         foreach ($mapping as $fieldName => $fieldMapping) {

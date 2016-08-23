@@ -24,17 +24,21 @@ use Metadata\MetadataFactory;
 use PHPCR\SimpleCredentials;
 use Pimple\Container as PimpleContainer;
 use Symfony\Cmf\Component\ContentType\ContentViewBuilder;
+use Symfony\Cmf\Component\ContentType\Field\CollectionField;
 use Symfony\Cmf\Component\ContentType\Field\TextField;
 use Symfony\Cmf\Component\ContentType\FieldRegistry;
-use Symfony\Cmf\Component\ContentType\Form\FormBuilder;
+use Symfony\Cmf\Component\ContentType\Form\Extension\FieldExtension;
 use Symfony\Cmf\Component\ContentType\Mapping\IntegerMapping;
 use Symfony\Cmf\Component\ContentType\Mapping\StringMapping;
 use Symfony\Cmf\Component\ContentType\MappingRegistry;
 use Symfony\Cmf\Component\ContentType\MappingResolver;
 use Symfony\Cmf\Component\ContentType\Metadata\Driver\ArrayDriver;
 use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\ContentTypeDriver;
-use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\MetadataSubscriber;
+use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\FieldMapper;
 use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\NodeTypeRegistrator as CtNodeTypeRegistrator;
+use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\PropertyEncoder;
+use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\Subscriber\CollectionSubscriber;
+use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\Subscriber\MetadataSubscriber;
 use Symfony\Cmf\Component\ContentType\Tests\Functional\Example\Field\ImageField;
 use Symfony\Cmf\Component\ContentType\Tests\Functional\Example\View\ImageView;
 use Symfony\Cmf\Component\ContentType\View\ScalarView;
@@ -77,6 +81,7 @@ class Container extends PimpleContainer
             $registry = new FieldRegistry();
             $registry->register('text', new TextField());
             $registry->register('image', new ImageField());
+            $registry->register('collection', new CollectionField());
 
             return $registry;
         };
@@ -97,14 +102,6 @@ class Container extends PimpleContainer
             return $registry;
         };
 
-        $this['cmf_content_type.form_builder'] = function ($container) {
-            return new FormBuilder(
-                $container['cmf_content_type.metadata.factory'],
-                $container['symfony.form_factory'],
-                $container['cmf_content_type.registry.field']
-            );
-        };
-
         $this['cmf_content_type.view_builder'] = function ($container) {
             return new ContentViewBuilder(
                 $container['cmf_content_type.metadata.factory'],
@@ -122,8 +119,12 @@ class Container extends PimpleContainer
 
     private function loadSymfonyForm()
     {
-        $this['symfony.form_factory'] = function () {
+        $this['symfony.form_factory'] = function ($container) {
             return Forms::createFormFactoryBuilder()
+                ->addExtension(new FieldExtension(
+                    $container['cmf_content_type.metadata.factory'],
+                    $container['cmf_content_type.registry.field']
+                ))
                 ->getFormFactory();
         };
     }
@@ -140,6 +141,14 @@ class Container extends PimpleContainer
 
     private function loadPhpcrOdm()
     {
+        $this['cmf_content_type.storage.doctrine.phpcr_odm.property_encoder'] = function ($container) {
+            return new PropertyEncoder('cmfct', 'https://github.com/symfony-cmf/content-type');
+        };
+
+        $this['cmf_content_type.storage.doctrine.phpcr_odm.field_mapper'] = function ($container) {
+            return new FieldMapper($container['cmf_content_type.storage.doctrine.phpcr_odm.property_encoder']);
+        };
+
         $this['doctrine_phpcr.document_manager'] = function ($container) {
             $registerNodeTypes = false;
 
@@ -169,7 +178,9 @@ class Container extends PimpleContainer
             if ($registerNodeTypes) {
                 $typeRegistrator = new NodeTypeRegistrator();
                 $typeRegistrator->registerNodeTypes($session);
-                $ctTypeRegistrator = new CtNodeTypeRegistrator();
+                $ctTypeRegistrator = new CtNodeTypeRegistrator(
+                    $container['cmf_content_type.storage.doctrine.phpcr_odm.property_encoder']
+                );
                 $ctTypeRegistrator->registerNodeTypes($session);
             }
 
@@ -177,7 +188,8 @@ class Container extends PimpleContainer
             $contentTypeDriver = new ContentTypeDriver(
                 $container['cmf_content_type.registry.field'],
                 $container['cmf_content_type.registry.mapping'],
-                $container['cmf_content_type.mapping_resolver']
+                $container['cmf_content_type.mapping_resolver'],
+                $container['cmf_content_type.storage.doctrine.phpcr_odm.field_mapper']
             );
 
             // annotation driver
@@ -199,7 +211,13 @@ class Container extends PimpleContainer
             $manager->getEventManager()->addEventSubscriber(new MetadataSubscriber(
                 $container['cmf_content_type.metadata.factory'],
                 $container['cmf_content_type.registry.field'],
-                $container['cmf_content_type.mapping_resolver']
+                $container['cmf_content_type.mapping_resolver'],
+                $container['cmf_content_type.storage.doctrine.phpcr_odm.field_mapper']
+            ));
+            $manager->getEventManager()->addEventSubscriber(new CollectionSubscriber(
+                $container['cmf_content_type.metadata.factory'],
+                $container['cmf_content_type.registry.field'],
+                $container['cmf_content_type.storage.doctrine.phpcr_odm.property_encoder']
             ));
 
             return $manager;

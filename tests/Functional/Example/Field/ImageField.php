@@ -43,5 +43,7 @@ class ImageField implements FieldInterface
     {
         $options->setDefault('repository', 'default');
         $options->setDefault('path', '/');
+
+        $options->setViewOptions(['repository', 'path']);
     }
 }

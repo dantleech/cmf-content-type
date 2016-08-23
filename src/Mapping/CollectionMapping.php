@@ -9,14 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Cmf\Component\ContentType\Tests\Functional\Example\Model;
+namespace Symfony\Cmf\Component\ContentType\Mapping;
 
-class Article
+use Symfony\Cmf\Component\ContentType\MappingInterface;
+
+class CollectionMapping implements MappingInterface
 {
-    public $title;
-    public $body;
-    public $tags;
-    public $seo;
-    public $image;
-    public $slideshow;
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm;
+namespace Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LoadClassMetadataEventArgs;
@@ -17,21 +17,25 @@ use Doctrine\ODM\PHPCR\Event;
 use Metadata\MetadataFactory;
 use Symfony\Cmf\Component\ContentType\FieldRegistry;
 use Symfony\Cmf\Component\ContentType\MappingResolver;
+use Symfony\Cmf\Component\ContentType\Storage\Doctrine\PhpcrOdm\FieldMapper;
 
 class MetadataSubscriber implements EventSubscriber
 {
     private $metadataFactory;
     private $fieldRegistry;
     private $mappingResolver;
+    private $mapper;
 
     public function __construct(
         MetadataFactory $metadataFactory,
         FieldRegistry $fieldRegistry,
-        MappingResolver $mappingResolver
+        MappingResolver $mappingResolver,
+        FieldMapper $mapper
     ) {
         $this->metadataFactory = $metadataFactory;
         $this->fieldRegistry = $fieldRegistry;
         $this->mappingResolver = $mappingResolver;
+        $this->mapper = $mapper;
     }
 
     public function getSubscribedEvents()
@@ -44,7 +48,7 @@ class MetadataSubscriber implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $args)
     {
         $metadata = $args->getClassMetadata();
-        $fieldMapper = new FieldMapper();
+        $fieldMapper = $this->mapper;
 
         if (null === $metadata = $this->metadataFactory->getMetadataForClass($metadata->getName())) {
             return;
