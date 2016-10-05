@@ -53,13 +53,13 @@ class ContentTypeDriver implements MappingDriver
             }
 
             // scalar fields will be mapped by the metadata subscriber.
-            if (!$mapping instanceof CompoundMapping) {
+            if (!$mapping->getMapping() instanceof CompoundMapping) {
                 continue;
             }
 
             // otherwise the field maps to its own object, so this driver will
             // take care of mapping that.
-            $this->fieldMappings[$mapping->getClass()] = $mapping;
+            $this->fieldMappings[$mapping->getMapping()->getClass()] = $mapping;
         }
 
         $this->initialized = true;
@@ -93,7 +93,7 @@ class ContentTypeDriver implements MappingDriver
         ]);
         $metadata->setReferenceable(true);
 
-        foreach ($mapping as $fieldName => $fieldMapping) {
+        foreach ($mapping->getMapping() as $fieldName => $fieldMapping) {
             $this->mapper->__invoke($fieldName, $fieldMapping, $metadata);
         }
     }

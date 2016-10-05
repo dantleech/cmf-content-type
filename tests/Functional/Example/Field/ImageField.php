@@ -24,7 +24,7 @@ class ImageField implements FieldInterface
     public function getMapping(MappingBuilder $builder)
     {
         return $builder->compound(Image::class)
-          ->map('path', 'string', ['length' => 255])
+          ->map('path', 'string')
           ->map('width', 'integer')
           ->map('height', 'integer')
           ->map('mimetype', 'string');

@@ -19,9 +19,9 @@ class MappingBuilderCompound
         $this->registry = $registry;
     }
 
-    public function map($propertyName, $mappingName)
+    public function map($propertyName, $mappingName, array $options = [])
     {
-        $mapping = $this->registry->get($mappingName);
+        $mapping = $this->registry->getConfiguredMapping($mappingName, $options);
 
         if (isset($this->mappings[$propertyName])) {
             throw new \InvalidArgumentException(sprintf(

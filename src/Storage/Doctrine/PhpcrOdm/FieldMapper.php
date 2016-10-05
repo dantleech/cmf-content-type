@@ -3,6 +3,7 @@
 namespace Psi\Component\ContentType\Storage\Doctrine\PhpcrOdm;
 
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
+use Psi\Component\ContentType\ConfiguredMapping;
 use Psi\Component\ContentType\Mapping\CollectionMapping;
 use Psi\Component\ContentType\Mapping\CompoundMapping;
 use Psi\Component\ContentType\Mapping\DateTimeMapping;
@@ -32,8 +33,10 @@ class FieldMapper
      * @param MappingInterface $fieldMapping
      * @param ClassMetadata $metadata
      */
-    public function __invoke($fieldName, MappingInterface $fieldMapping, ClassMetadata $metadata)
+    public function __invoke($fieldName, ConfiguredMapping $configuredMapping, ClassMetadata $metadata)
     {
+        $fieldMapping = $configuredMapping->getMapping();
+
         if ($fieldMapping instanceof CompoundMapping) {
             $metadata->mapChild([
                 'fieldName' => $fieldName,

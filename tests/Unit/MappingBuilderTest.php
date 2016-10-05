@@ -2,6 +2,7 @@
 
 namespace Psi\Component\ContentType\Tests\Unit;
 
+use Psi\Component\ContentType\ConfiguredMapping;
 use Psi\Component\ContentType\MappingBuilder;
 use Psi\Component\ContentType\MappingBuilderCompound;
 use Psi\Component\ContentType\MappingInterface;
@@ -18,6 +19,11 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder = new MappingBuilder($this->registry->reveal());
 
         $this->mapping1 = $this->prophesize(MappingInterface::class);
+        $this->configuredMapping1 = $this->prophesize(ConfiguredMapping::class);
+        $this->configuredMapping1->getMapping()->willReturn($this->mapping1->reveal());
+        $this->mapping1->getDefaultOptions()->willReturn([
+            'foobar' => 'booboo',
+        ]);
     }
 
     /**
@@ -25,10 +31,10 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSingleScalar()
     {
-        $this->registry->get('string')->willReturn($this->mapping1->reveal());
+        $this->registry->getConfiguredMapping('string', [])->willReturn($this->configuredMapping1->reveal());
         $mapping = $this->builder->single('string');
 
-        $this->assertSame($this->mapping1->reveal(), $mapping);
+        $this->assertSame($this->mapping1->reveal(), $mapping->getMapping());
     }
 
     /**
@@ -37,10 +43,11 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
     public function testCompound()
     {
         $classFqn = 'My\Compound\DataTransferObject';
-        $this->registry->get('string')->willReturn($this->mapping1->reveal());
+        $this->registry->getConfiguredMapping('string', [])->willReturn($this->configuredMapping1->reveal());
+        $this->registry->getConfiguredMapping('string', ['foobar' => 'barfoo'])->willReturn($this->configuredMapping1->reveal());
 
         $mapping = $this->builder->compound($classFqn)
-            ->map('foobar', 'string')
+            ->map('foobar', 'string', ['foobar' => 'barfoo'])
             ->map('foobar_barfoo', 'string');
 
         $this->assertInstanceOf(MappingBuilderCompound::class, $mapping);
@@ -50,6 +57,6 @@ class MappingBuilderTest extends \PHPUnit_Framework_TestCase
         $mapping = iterator_to_array($compound);
 
         $this->assertCount(2, $mapping);
-        $this->assertSame($this->mapping1->reveal(), $mapping['foobar']);
+        $this->assertSame($this->mapping1->reveal(), $mapping['foobar']->getMapping());
     }
 }

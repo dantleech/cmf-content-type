@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Psi\Component\ContentType\Mapping;
 
 use Psi\Component\ContentType\MappingInterface;
@@ -38,5 +40,10 @@ class CompoundMapping implements \IteratorAggregate, MappingInterface
     public function getIterator()
     {
         return new \ArrayIterator($this->mappings);
+    }
+
+    public function getDefaultOptions(): array
+    {
+        return [];
     }
 }

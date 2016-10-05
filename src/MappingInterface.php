@@ -9,4 +9,5 @@ namespace Psi\Component\ContentType;
  */
 interface MappingInterface
 {
+    public function getDefaultOptions(): array;
 }
