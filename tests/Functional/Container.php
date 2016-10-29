@@ -11,6 +11,7 @@ use Psi\Component\ContentType\FieldRegistry;
 use Psi\Component\ContentType\Form\Extension\FieldExtension;
 use Psi\Component\ContentType\Metadata\Driver\AnnotationDriver as CTAnnotationDriver;
 use Psi\Component\ContentType\Metadata\Driver\ArrayDriver;
+use Psi\Component\ContentType\Standard\Field\ChoiceField;
 use Psi\Component\ContentType\Standard\Field\CollectionField;
 use Psi\Component\ContentType\Standard\Field\DateTimeField;
 use Psi\Component\ContentType\Standard\Field\IntegerField;
@@ -77,18 +78,19 @@ class Container extends PimpleContainer
             $registry->register('image', new ImageField());
             $registry->register('object_reference', new ObjectReferenceField());
             $registry->register('collection', new CollectionField($registry));
+            $registry->register('choice', new ChoiceField($registry));
 
             return $registry;
         };
 
         $this['psi_content_type.registry.type'] = function ($container) {
             $registry = new Storage\TypeRegistry();
-            $registry->register('string', new StdStorage\StringType());
-            $registry->register('integer', new StdStorage\IntegerType());
-            $registry->register('datetime', new StdStorage\DateTimeType());
-            $registry->register('reference', new StdStorage\ReferenceType());
-            $registry->register('object', new StdStorage\ObjectType());
-            $registry->register('collection', new StdStorage\CollectionType());
+            $registry->register(StdStorage\StringType::class, new StdStorage\StringType());
+            $registry->register(StdStorage\IntegerType::class, new StdStorage\IntegerType());
+            $registry->register(StdStorage\DateTimeType::class, new StdStorage\DateTimeType());
+            $registry->register(StdStorage\ReferenceType::class, new StdStorage\ReferenceType());
+            $registry->register(StdStorage\ObjectType::class, new StdStorage\ObjectType());
+            $registry->register(StdStorage\CollectionType::class, new StdStorage\CollectionType());
 
             return $registry;
         };
@@ -127,6 +129,7 @@ class Container extends PimpleContainer
             $registry->register(ImageType::class, new ImageType());
             $registry->register(StdView\NullType::class, new StdView\NullType());
             $registry->register(StdView\ScalarType::class, new StdView\ScalarType());
+            $registry->register(StdView\DateTimeType::class, new StdView\DateTimeType());
             $registry->register(StdView\CollectionType::class, new StdView\CollectionType(
                 $container->get('psi_content_type.field_loader')
             ));
