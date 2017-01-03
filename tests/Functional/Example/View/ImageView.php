@@ -2,7 +2,7 @@
 
 namespace Psi\Component\ContentType\Tests\Functional\Example\View;
 
-use Psi\Component\ContentType\View\ViewInterface;
+use Psi\Component\View\ViewInterface;
 
 class ImageView implements ViewInterface
 {

@@ -5,7 +5,7 @@ namespace Psi\Component\ContentType\Tests\Functional\Example\Field;
 use Psi\Component\ContentType\FieldInterface;
 use Psi\Component\ContentType\OptionsResolver\FieldOptionsResolver;
 use Psi\Component\ContentType\Standard\Storage\ReferenceType;
-use Psi\Component\ContentType\View\ScalarView;
+use Psi\Component\View\ScalarView;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ObjectReferenceField implements FieldInterface

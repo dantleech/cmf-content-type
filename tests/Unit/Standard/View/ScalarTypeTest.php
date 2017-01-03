@@ -4,7 +4,7 @@ namespace Psi\Component\ContentType\Tests\Unit\Standard\View;
 
 use Psi\Component\ContentType\Standard\View\ScalarType;
 use Psi\Component\ContentType\Standard\View\ScalarView;
-use Psi\Component\ContentType\View\View;
+use Psi\Component\View\View;
 
 class ScalarTypeTest extends TypeTestCase
 {

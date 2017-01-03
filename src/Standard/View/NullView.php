@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Psi\Component\ContentType\Standard\View;
 
-use Psi\Component\ContentType\View\ViewInterface;
+use Psi\Component\View\ViewInterface;
 
 class NullView implements ViewInterface
 {

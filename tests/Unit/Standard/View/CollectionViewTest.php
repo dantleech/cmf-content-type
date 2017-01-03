@@ -3,8 +3,8 @@
 namespace Psi\Component\ContentType\Tests\Unit\Standard\View;
 
 use Psi\Component\ContentType\Standard\View\CollectionView;
-use Psi\Component\ContentType\View\ViewFactory;
-use Psi\Component\ContentType\View\ViewInterface;
+use Psi\Component\View\ViewFactory;
+use Psi\Component\View\ViewInterface;
 
 class CollectionViewTest extends \PHPUnit_Framework_TestCase
 {

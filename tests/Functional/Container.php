@@ -18,8 +18,8 @@ use Psi\Component\ContentType\Storage;
 use Psi\Component\ContentType\Tests\Functional\Example\Field\ImageField;
 use Psi\Component\ContentType\Tests\Functional\Example\Field\ObjectReferenceField;
 use Psi\Component\ContentType\Tests\Functional\Example\View\ImageType;
-use Psi\Component\ContentType\View;
-use Psi\Component\ContentType\View\ViewFactory;
+use Psi\Component\View;
+use Psi\Component\View\ViewFactory;
 use Symfony\Component\Form\Forms;
 
 class Container extends PimpleContainer

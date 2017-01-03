@@ -2,7 +2,7 @@
 
 namespace Psi\Component\ContentType\Tests\Unit\Standard\View;
 
-use Psi\Component\ContentType\View\ViewFactory;
+use Psi\Component\View\ViewFactory;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class TypeTestCase extends \PHPUnit_Framework_TestCase

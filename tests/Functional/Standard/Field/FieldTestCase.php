@@ -4,7 +4,7 @@ namespace Psi\Component\ContentType\Tests\Functional\Standard\Field;
 
 use Psi\Component\ContentType\FieldOptions;
 use Psi\Component\ContentType\Tests\Functional\BaseTestCase;
-use Psi\Component\ContentType\View\ViewInterface;
+use Psi\Component\View\ViewInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

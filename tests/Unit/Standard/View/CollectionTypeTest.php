@@ -7,7 +7,7 @@ use Psi\Component\ContentType\FieldLoader;
 use Psi\Component\ContentType\FieldOptions;
 use Psi\Component\ContentType\Standard\View\CollectionType;
 use Psi\Component\ContentType\Standard\View\CollectionView;
-use Psi\Component\ContentType\View\View;
+use Psi\Component\View\View;
 
 class CollectionTypeTest extends TypeTestCase
 {

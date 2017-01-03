@@ -12,7 +12,7 @@ use Psi\Component\ContentType\Metadata\ClassMetadata;
 use Psi\Component\ContentType\Metadata\PropertyMetadata;
 use Psi\Component\ContentType\Standard\View\ObjectType;
 use Psi\Component\ContentType\Standard\View\ObjectView;
-use Psi\Component\ContentType\View\ViewInterface;
+use Psi\Component\View\ViewInterface;
 
 class ObjectTypeTest extends TypeTestCase
 {
